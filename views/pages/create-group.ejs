@@ -1,0 +1,36 @@
+<style>
+  #createGroup {
+    width: 600px;
+    margin-inline: auto;
+  }
+
+  @media (max-width: 768px) {
+    #createGroup {
+      width: 100%;
+      margin-inline: 0;
+    }
+  }
+</style>
+<section id="createGroup">
+  <%- include('../partials/goback.ejs') %>
+    <% if(typeof errors !=="undefined" && Boolean(errors?.length)) { %>
+      <% errors.forEach(function (error) { %>
+        <div class="alert alert-danger" role="alert">
+          <%= error %>
+        </div>
+        <% }) %>
+          <% } %>
+            <% if(typeof success_msg !=='undefined' ) { %>
+              <div class="alert alert-success" role="alert">
+                <%= success_msg %>
+              </div>
+              <% } %>
+                <form action="/create-group" method="post">
+                  <div class="mb-3">
+                    <label for="name" class="form-label">Name</label>
+                    <input type="text" class="form-control" id="name" name="name" value=<%=typeof name !=="undefined" ?
+                      name : "" %> >
+                  </div>
+                  <button type="submit" class="btn btn-danger float-end">Create</button>
+                </form>
+</section>

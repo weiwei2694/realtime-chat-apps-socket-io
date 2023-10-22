@@ -1,0 +1,53 @@
+<!-- Styles -->
+<style>
+  #listGroup {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 4rem;
+    margin-top: 3rem;
+  }
+
+  @media (max-width: 992px) {
+    #listGroup {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (max-width: 600px) {
+    #listGroup {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+  }
+</style>
+
+<!-- Section Groups -->
+<section>
+  <nav class="d-flex justify-content-between align-items-start">
+    <h1>List Group</h1>
+    <a class="btn btn-danger" href="/create-group">Create Group</a>
+  </nav>
+  <section id="listGroup">
+    <% if (Boolean(dataRooms.length)) { %>
+      <% dataRooms.forEach(function(data) { %>
+        <article class="d-flex justify-content-between align-items-start">
+          <div class="d-flex flex-column">
+            <h4>
+              <%= data.name %>
+            </h4>
+            <p>
+              <%= data._count.participants %> Anggota
+            </p>
+          </div>
+          <% if (user.participants.some(({ roomId })=> roomId === data.id)) { %>
+            <a class="btn btn-danger" type="button" href="<%= `/room/${data.id}` %>">View Group</a>
+            <% } else { %>
+              <form action="/room/<%= data.id %>" method="post">
+                <button class="btn btn-danger" type="submit">Join Group</button>
+              </form>
+              <% } %>
+        </article>
+        <% }) %>
+          <% } %>
+  </section>
+</section>

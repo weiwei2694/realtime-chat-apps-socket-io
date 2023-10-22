@@ -1,0 +1,62 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              String        @id @default(uuid())
+  name            String        @db.Char(30)
+  username        String        @unique @db.Char(30)
+  email           String        @unique @db.Char(100)
+  hashingPassword String
+  message         Message[]
+  participants    Participant[]
+
+  @@index([username, email])
+  @@map("user")
+}
+
+model Room {
+  id           String        @id @default(uuid())
+  name         String        @db.Char(30)
+  messages     Message[]
+  participants Participant[]
+
+  @@index([name])
+  @@map("room")
+}
+
+model Message {
+  id        String   @id @default(uuid())
+  text      String   @db.Char(255)
+  roomId    String
+  userId    String
+  createdAt DateTime @default(now())
+  room      Room     @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([roomId, userId])
+  @@map("message")
+}
+
+model Participant {
+  id     String           @id @default(uuid())
+  userId String
+  roomId String
+  role   ParticipantsRole
+  room   Room             @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  user   User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([roomId, userId])
+  @@map("participant")
+}
+
+enum ParticipantsRole {
+  Founder
+  Admin
+  User
+}
