@@ -7,9 +7,9 @@ This project explores the implementation of realtime chat applications, utilizin
 
 ## Preview
 
-![Home]("/assets/preview-1.png")
-![Room]("/assets/preview-2.png")
-![Search Menu]("/assets/preview-3.png")
+![Home](https://github.com/weiwei2694/realtime-chat-apps-socket-io/blob/main/public/assets/preview-1.PNG)
+![Room](https://github.com/weiwei2694/realtime-chat-apps-socket-io/blob/main/public/assets/preview-2.PNG)
+![Search Menu](https://github.com/weiwei2694/realtime-chat-apps-socket-io/blob/main/public/assets/preview-3.PNG)
 
 ## Features
 
