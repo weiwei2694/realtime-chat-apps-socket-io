@@ -45,7 +45,7 @@ app.use(
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
-  }),
+  })
 );
 
 // Passport
@@ -59,11 +59,22 @@ passport.deserializeUser(deserializeUser);
 
 // Home -> /
 app.get("/", checkAuthenticate, async (req, res) => {
+  const { search } = req.query;
+
   const seo = {
     title: "Home / Realtime Chat",
   };
 
+  const whereFilter = {};
+
+  if (typeof search !== "undefined") {
+    whereFilter.name = {
+      contains: search,
+    };
+  }
+
   const dataRooms = await prisma.room.findMany({
+    where: whereFilter,
     include: {
       _count: {
         select: {
@@ -91,6 +102,7 @@ app.get("/", checkAuthenticate, async (req, res) => {
     layout: "layout/private",
     dataRooms,
     user,
+    search,
   });
 });
 
@@ -143,7 +155,7 @@ app
     });
 
     const isUserParticipantInExistingRoom = user.participants.some(
-      ({ roomId }) => roomId === existingRoom.id,
+      ({ roomId }) => roomId === existingRoom.id
     );
 
     if (!isUserParticipantInExistingRoom) {
@@ -267,7 +279,7 @@ app
       successRedirect: "/",
       failureRedirect: "/login",
       failureFlash: true,
-    }),
+    })
   );
 
 // Register -> /register

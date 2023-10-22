@@ -7,6 +7,11 @@
     margin-top: 3rem;
   }
 
+  .search {
+    font-size: 28px;
+    color: #888;
+  }
+
   @media (max-width: 992px) {
     #listGroup {
       grid-template-columns: 1fr 1fr;
@@ -27,27 +32,39 @@
     <h1>List Group</h1>
     <a class="btn btn-danger" href="/create-group">Create Group</a>
   </nav>
-  <section id="listGroup">
-    <% if (Boolean(dataRooms.length)) { %>
-      <% dataRooms.forEach(function(data) { %>
-        <article class="d-flex justify-content-between align-items-start">
-          <div class="d-flex flex-column">
-            <h4>
-              <%= data.name %>
-            </h4>
-            <p>
-              <%= data._count.participants %> Anggota
-            </p>
-          </div>
-          <% if (user.participants.some(({ roomId })=> roomId === data.id)) { %>
-            <a class="btn btn-danger" type="button" href="<%= `/room/${data.id}` %>">View Group</a>
-            <% } else { %>
-              <form action="/room/<%= data.id %>" method="post">
-                <button class="btn btn-danger" type="submit">Join Group</button>
-              </form>
-              <% } %>
-        </article>
-        <% }) %>
-          <% } %>
-  </section>
+  <% if (typeof search !=="undefined" ) { %>
+    <div class="d-flex gap-3 align-items-center">
+      <%- include('../partials/goback.ejs') %>
+        <p class="search">
+          pencarian: <%= search %>
+        </p>
+    </div>
+    <% } %>
+      <section id="listGroup">
+        <% if (Boolean(dataRooms.length)) { %>
+          <% dataRooms.forEach(function(data) { %>
+            <article class="d-flex justify-content-between align-items-start">
+              <div class="d-flex flex-column">
+                <h4>
+                  <%= data.name %>
+                </h4>
+                <p>
+                  <%= data._count.participants %> Anggota
+                </p>
+              </div>
+              <% if (user.participants.some(({ roomId })=> roomId === data.id)) { %>
+                <a class="btn btn-danger" type="button" href="<%= `/room/${data.id}` %>">View Group</a>
+                <% } else { %>
+                  <form action="/room/<%= data.id %>" method="post">
+                    <button class="btn btn-danger" type="submit">Join Group</button>
+                  </form>
+                  <% } %>
+            </article>
+            <% }) %>
+              <% } else { %>
+                <p class="search">
+                  tidak ada data
+                </p>
+                <% } %>
+      </section>
 </section>
