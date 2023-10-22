@@ -1,5 +1,5 @@
+require("dotenv").config();
 const express = require("express");
-const dotenv = require("dotenv");
 const BodyParser = require("body-parser");
 const app = express();
 const path = require("path");
@@ -9,6 +9,7 @@ const passport = require("passport");
 const expressSession = require("express-session");
 const { hash } = require("bcryptjs");
 const prisma = require("./prisma");
+const methodOverride = require("method-override");
 const {
   localStrategy,
   deserializeUser,
@@ -25,9 +26,6 @@ const http = require("http");
 const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
-
-// Dot Env
-dotenv.config();
 
 // BodyParser
 app.use(bodyParser.json());
@@ -47,6 +45,9 @@ app.use(
     saveUninitialized: false,
   })
 );
+
+// Method Override
+app.use(methodOverride("_method"));
 
 // Passport
 app.use(passport.initialize());
@@ -364,6 +365,16 @@ app
 
     res.render("pages/register", fields);
   });
+
+// Logout -> /logout
+app.delete("/logout", checkAuthenticate, (req, res) => {
+  req.logout(function (err) {
+    if (err) {
+      return next(err);
+    }
+    res.redirect("/");
+  });
+});
 
 io.on("connection", (socket) => {
   socket.on("message", async (data) => {
